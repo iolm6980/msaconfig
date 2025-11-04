@@ -1,9 +1,40 @@
 server:
   port: 8081
+
 spring:
   application:
     name: product-service
+
+  config:
+    import: optional:configserver:http://config-server:8888    # ✅ 변경 (localhost → config-server)
+
+  kafka:
+    bootstrap-servers: kafka:9094   # ✅ 변경 (localhost → kafka)
+
+    consumer:
+      group-id: product-consumer-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
 eureka:
+  instance:
+    prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://discovery-server:8761/eureka    # ✅ 변경 (localhost → discovery-server)
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans    # ✅ 변경 (localhost → zipkin)
+
+  endpoints:
+    web:
+      exposure:
+        include: '*'
