@@ -5,9 +5,6 @@ spring:
   application:
     name: order-service
 
-  config:
-    import: optional:configserver:http://config-server:8888   # ✅ 변경 (localhost → config-server)
-
   cloud:
     openfeign:
       circuitbreaker:
@@ -55,3 +52,4 @@ management:
     web:
       exposure:
         include: '*'
+
